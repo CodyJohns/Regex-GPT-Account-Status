@@ -33,17 +33,12 @@ public class AccountStatusController {
 
         try {
             return service.getUserStatus(request);
-        } catch (NullPointerException e) {
+        } catch (NullPointerException | AuthtokenExpiredException e) {
             AccountStatusResult response = new AccountStatusResult();
             response.status = 404;
             response.message = e.getMessage();
             return response;
-        } catch(AuthtokenExpiredException e) {
-            AccountStatusResult response = new AccountStatusResult();
-            response.status = 404;
-            response.message = e.getMessage();
-            return response;
-        } catch (RuntimeException e) {
+        } catch (IllegalArgumentException e) {
             AccountStatusResult response = new AccountStatusResult();
             response.status = 400;
             response.message = e.getMessage();

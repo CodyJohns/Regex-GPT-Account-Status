@@ -21,7 +21,7 @@ public class AccountService {
 	public AccountStatusController.AccountStatusResult getUserStatus(AccountStatusController.AccountStatusRequest request) throws AuthtokenExpiredException {
 
 		if(request.authtoken == null)
-			throw new RuntimeException("Authorization token is required.");
+			throw new IllegalArgumentException("Authorization token is required.");
 
 		Authtoken authtoken = factory.getAuthtokenDAO().getByID(request.authtoken);
 
