@@ -3,15 +3,18 @@ package com.cdjmdev.regex.service;
 import com.cdjmdev.oracle.dao.DAOFactory;
 import com.cdjmdev.oracle.exception.AuthtokenExpiredException;
 import com.cdjmdev.oracle.model.Authtoken;
+import com.cdjmdev.oracle.model.PromptHistory;
 import com.cdjmdev.oracle.model.Tiers;
 import com.cdjmdev.oracle.model.User;
 import com.cdjmdev.oracle.util.Utilities;
 import com.cdjmdev.regex.AccountStatusController;
 
+import java.util.List;
 import java.util.Map;
 
 public class AccountService {
 
+	private final int HISTORY_MAX = 25;
 	private DAOFactory factory;
 
 	public AccountService(DAOFactory factory) {
@@ -33,14 +36,17 @@ public class AccountService {
 		if(!Utilities.isSameDay(user.lastUse, Utilities.getCurrentTimestamp()))
 			user.dailyUses = 0; //does not save just updates to actual daily uses
 
+		List<PromptHistory> history = factory.getPromptHistoryDAO().getByUser(user, HISTORY_MAX);
+
 		AccountStatusController.AccountStatusResult response = new AccountStatusController.AccountStatusResult();
 
 		response.message = "Ok";
 		response.data = Map.of(
 			"tier", user.tier,
-			"daily_uses", String.valueOf(user.dailyUses),
-			"max_uses", String.valueOf(user.tier.equalsIgnoreCase(Tiers.FREE) ? Tiers.MAX_USES_FREE : Tiers.MAX_USES_PAID),
-			"email", user.email
+			"daily_uses", user.dailyUses,
+			"max_uses", user.tier.equalsIgnoreCase(Tiers.FREE) ? Tiers.MAX_USES_FREE : Tiers.MAX_USES_PAID,
+			"email", user.email,
+			"history", history
 		);
 
 		return response;

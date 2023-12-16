@@ -24,7 +24,7 @@ public class AccountStatusController {
     }
 
     public static class AccountStatusResult {
-        public Map<String, String> data;
+        public Map<String, Object> data;
         public String message;
         public int status = 200;
     }
