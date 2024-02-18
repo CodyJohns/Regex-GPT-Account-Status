@@ -1,7 +1,7 @@
 ## Regex-GPT Source Code
 **Regex generation using OpenAI's ChatGPT**
 
-Deployed at: https://regex-gpt.cdjmdev.com/
+Deployed at: https://regex-gen.cdjmdev.com/
 
 Front-end:
 * https://github.com/CodyJohns/Regex-GPT-App
